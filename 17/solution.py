@@ -23,21 +23,16 @@ def simulate(data, dim, steps):
     neighbours = {n+(k,) for n in neighbours for k in (-1,0,1)} - {(0,) * dim}
 
   for _ in range(steps):
-    new = set()
-    chk = dict()
+    todo = dict()
 
     for i in grid:
-      nb     = {tuple(map(int.__add__,a,i)) for a in neighbours}
-      chk[i] = len(nb & grid)
+      nb      = {tuple(map(int.__add__,a,i)) for a in neighbours}
+      todo[i] = len(nb & grid)
 
       for j in nb - grid:
-        chk[j] = chk.get(j, 0) + 1
+        todo[j] = todo.get(j, 0) + 1
 
-    for i, nb in chk.items():
-      if nb in conditions[i in grid]:
-        new.add(i)
-
-    grid = new
+    grid = {i for i, nb in todo.items() if nb in conditions[i in grid]}
 
   return len(grid)
 
