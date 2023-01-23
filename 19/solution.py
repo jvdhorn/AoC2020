@@ -7,9 +7,9 @@ def parse(inp):
   new_rules    = dict()
 
   for rule in rules.splitlines():
-    n, x = rule.split(': ')
+    n, x = rule.split(':')
     if '"' in x:
-      x = x.strip('"')
+      x = x.strip('" ')
     else:
       x = tuple(tuple(map(int, part.split())) for part in x.split('|'))
     new_rules[int(n)] = x
@@ -27,7 +27,7 @@ def partition(line, n, cache=dict()):
 
     for i in range(n-1):
       result = tuple(res[:-1] + (res[-1][:j], res[-1][j:])
-                     for res in result for j in range(1,len(res[-1])))
+                     for res in result for j in range(1, len(res[-1]) - i))
 
     cache[line,n] = result
 
