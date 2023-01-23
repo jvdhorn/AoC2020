@@ -14,23 +14,31 @@ def parse(inp):
 
 def simulate(data, dim, steps):
 
+  conditions = ((3,), (2, 3))
+  dim        = max(dim, len(next(iter(data))))
   grid       = {x + (0,) * (dim - len(x)) for x in data}
   neighbours = {()}
 
-  for i in range(dim):
+  for _ in range(dim):
     neighbours = {n+(k,) for n in neighbours for k in (-1,0,1)} - {(0,) * dim}
 
   for _ in range(steps):
     new = set()
-    chk = {tuple(map(int.__add__,a,i)) for a in neighbours for i in grid} | grid
+    chk = dict()
 
-    for i in chk:
-      nb = sum(tuple(map(int.__add__,a,i)) in grid for a in neighbours)
-      if   i in grid and nb in (2,3): new.add(i)
-      elif i not in grid and nb == 3: new.add(i)
+    for i in grid:
+      nb     = {tuple(map(int.__add__,a,i)) for a in neighbours}
+      chk[i] = len(nb & grid)
+
+      for j in nb - grid:
+        chk[j] = chk.get(j, 0) + 1
+
+    for i, nb in chk.items():
+      if nb in conditions[i in grid]:
+        new.add(i)
 
     grid = new
-      
+
   return len(grid)
 
 
