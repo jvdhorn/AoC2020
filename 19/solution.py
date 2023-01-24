@@ -42,14 +42,16 @@ def get_validator(rules):
 
     if valid is None:
 
-      if isinstance(rules[n], str):
-        valid = (line == rules[n])
+      rule = rules[n]
+
+      if isinstance(rule, str):
+        valid = (line == rule)
 
       else:
         valid = False
-        for rule in rules[n]:
-          for parts in partition(line, len(rule)):
-            valid = all(map(validate, parts, rule))
+        for subrule in rule:
+          for parts in partition(line, len(subrule)):
+            valid = all(map(validate, parts, subrule))
             if valid: break
           if valid: break
 
