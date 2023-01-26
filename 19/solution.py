@@ -25,9 +25,9 @@ def partition(line, n, cache=dict()):
 
     result = ((line,),)
 
-    for i in range(n-1):
+    for _ in range(n-1):
       result = tuple(res[:-1] + (res[-1][:j], res[-1][j:])
-                     for res in result for j in range(1, len(res[-1]) - i))
+                     for res in result for j in range(1, len(res[-1])))
 
     cache[line,n] = result
 
